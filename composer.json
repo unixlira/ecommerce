@@ -1,0 +1,22 @@
+{
+    "name": "unixlira/e-commerce",
+    "description": "Projeto de Loja Virtual.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "José Roberto Lira",
+            "email": "joserobertolira@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "~6.0",
+        "slim/slim":"2.0",
+        "rain/raintpl": ">=3.0.0"
+    },
+    "autoload":{
+        "psr-4":{
+            "Lira\\": "vendor\\unixlira\\php-classes\\src"
+        }
+    }
+}
