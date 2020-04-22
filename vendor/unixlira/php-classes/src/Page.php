@@ -5,7 +5,6 @@ namespace Lira;
 use Rain\Tpl;
 
 
-
 class Page {
 
 	private $tpl;
@@ -25,7 +24,7 @@ class Page {
 		$config = array(
 		    "tpl_dir"       => $_SERVER["DOCUMENT_ROOT"].$tpl_dir,
 		    "cache_dir"     => $_SERVER["DOCUMENT_ROOT"]."/views-cache/",
-		    "debug"         => false, // set to false to improve the speed = Ok man !
+		    "debug"         => false,
 		);
 
 		Tpl::configure( $config );

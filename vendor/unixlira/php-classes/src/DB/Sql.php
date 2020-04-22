@@ -5,8 +5,8 @@ namespace Lira\DB;
 class Sql {
 
 	const HOSTNAME = "127.0.0.1";
-	const USERNAME = "unixlira";
-	const PASSWORD = "#";
+	const USERNAME = "root";
+	const PASSWORD = "#Fibra13";
 	const DBNAME = "db_ecommerce";
 
 	private $conn;
