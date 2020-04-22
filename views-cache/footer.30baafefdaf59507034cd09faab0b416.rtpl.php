@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-about-us">
-                        <h2>Hcode Store</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus vero quam laborum quas alias dolores blanditiis iusto consequatur, modi aliquid eveniet eligendi iure eaque ipsam iste, pariatur omnis sint! Suscipit, debitis, quisquam. Laborum commodi veritatis magni at?</p>
+                        <h2>Lira Store</h2>
+                        <p>Acesse nossa página noas redes sociais e encontre promoções exclusivas!</p>
                         <div class="footer-social">
                             <a href="https://www.facebook.com/hcodebr" target="_blank"><i class="fa fa-facebook"></i></a>
                             <a href="https://twitter.com/hcodebr" target="_blank"><i class="fa fa-twitter"></i></a>
@@ -30,11 +30,8 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">Categorias</h2>
                         <ul>
-                            <li><a href="#">Categoria Um</a></li>
-                            <li><a href="#">Categoria Dois</a></li>
-                            <li><a href="#">Categoria Três</a></li>
-                            <li><a href="#">Categoria Quarto</a></li>
-                            <li><a href="#">Categoria Cinco</a></li>
+                            <?php require $this->checkTemplate("categories-menu");?>
+
                         </ul>                        
                     </div>
                 </div>
@@ -42,11 +39,11 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-newsletter">
                         <h2 class="footer-wid-title">Newsletter</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus!</p>
+                        <p>Inscrevase e fique por dentro das promoções!</p>
                         <div class="newsletter-form">
                             <form action="#">
-                                <input type="email" placeholder="Type your email">
-                                <input type="submit" value="Subscribe">
+                                <input type="email" placeholder="Email">
+                                <input type="submit" value="Inscrever">
                             </form>
                         </div>
                     </div>
@@ -60,7 +57,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
-                        <p>&copy; 2017 Hcode Treinamentos. <a href="http://www.hcode.com.br" target="_blank">hcode.com.br</a></p>
+                        <p>&copy; 2016 <a href="http://digplay.tech" target="_blank">Dig Play Tech</a></p>
                     </div>
                 </div>
                 

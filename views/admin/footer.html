@@ -5,7 +5,7 @@
         Anything you want
       </div>
       <!-- Default to the left -->
-      <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+      <strong>Copyright &copy; 2016 <a href="http://lira.digplay.tech">Lira</a>.</strong> Todos direitos reservados.
     </footer>
 
     <!-- Control Sidebar -->
