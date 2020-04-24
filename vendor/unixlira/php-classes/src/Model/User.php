@@ -40,7 +40,7 @@ class User extends Model {
 			||
 			!(int)$_SESSION[User::SESSION]["iduser"] > 0
 		) {
-			//Não está logado
+			
 			return false;
 
 		} else {
@@ -54,7 +54,7 @@ class User extends Model {
 				return true;
 
 			} else {
-				//Tem sessão 
+				
 				return false;
 
 			}
@@ -249,7 +249,7 @@ class User extends Model {
 					
 				}				
 
-				$mailer = new Mailer($data['desemail'], $data['desperson'], "Redefinir senha da Hcode Store", "forgot", array(
+				$mailer = new Mailer($data['desemail'], $data['desperson'], "Redefinir senha da Lira Store", "forgot", array(
 					"name"=>$data['desperson'],
 					"link"=>$link
 				));				

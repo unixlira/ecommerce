@@ -230,14 +230,14 @@ $app->post("/checkout", function(){
 	$user = User::getFromSession();
 
 	$address = new Address();
-
+	
 	$_POST['deszipcode'] = $_POST['zipcode'];
 	$_POST['idperson'] = $user->getidperson();
 
 	$address->setData($_POST);
-
+	
 	$address->save();
-
+	
 	$cart = Cart::getFromSession();
 
 	$cart->getCalculateTotal();
@@ -249,7 +249,7 @@ $app->post("/checkout", function(){
 		'idaddress'=>$address->getidaddress(),
 		'iduser'=>$user->getiduser(),
 		'idstatus'=>OrderStatus::EM_ABERTO,
-		'vltotal'=>$cart->getvltotal()
+		'vltotal'=>$cart->getvltotal(),
 	]);
 
 	$order->save();
@@ -257,16 +257,39 @@ $app->post("/checkout", function(){
 	switch ((int)$_POST['payment-method']) {
 
 		case 1:
-		header("Location: /order/".$order->getidorder()."/pagseguro");
-		break;
+			header("Location: order/".$order->getidorder()."/pagseguro");
+			break;
 
 		case 2:
-		header("Location: /order/".$order->getidorder()."/paypal");
-		break;
+			header("Location: order/".$order->getidorder()."/paypal");
+			break;
+
+		case 3:
+			header("Location: order/".$order->getidorder());
+			break;
 
 	}
 
 	exit;
+
+});
+
+$app->get("/order/:idorder", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page();
+
+	$page->setTpl("payment", [
+		'order'=>$order->getValues()
+	]);
+
 
 });
 
@@ -346,7 +369,12 @@ $app->post("/login", function(){
 
 	}
 
-	header("Location: /checkout");
+	if(getCartNrQtd() == "0"){
+		header("Location: /");
+	}else{
+		header("Location: /checkout");
+	}
+	
 	exit;
 
 });
@@ -479,7 +507,11 @@ $app->get("/profile", function(){
 
 	User::verifyLogin(false);
 
-	$user = User::getFromSession();
+	$userSession = User::getFromSession();
+	$userId = $userSession->getValues();
+	
+	$user = new User();
+	$user->get((int)$userId['iduser']);
 
 	$page = new Page();
 
@@ -511,7 +543,7 @@ $app->post("/profile", function(){
 
 	if ($_POST['desemail'] !== $user->getdesemail()) {
 
-		if (User::checkLoginExists($_POST['desemail']) === true) {
+		if (User::checkLogin($_POST['desemail']) === true) {
 
 			User::setError("Este endereço de e-mail já está cadastrado.");
 			header('Location: /profile');
@@ -527,7 +559,7 @@ $app->post("/profile", function(){
 
 	$user->setData($_POST);
 
-	$user->save();
+	$user->update();
 
 	User::setSuccess("Dados alterados com sucesso!");
 
@@ -583,13 +615,13 @@ $app->get("/boleto/:idorder", function($idorder){
 	$dadosboleto["endereco2"] = $order->getdescity() . " - " . $order->getdesstate() . " - " . $order->getdescountry() . " -  CEP: " . $order->getdeszipcode();
 
 	// INFORMACOES PARA O CLIENTE
-	$dadosboleto["demonstrativo1"] = "Pagamento de Compra na Loja Hcode E-commerce";
+	$dadosboleto["demonstrativo1"] = "Pagamento de Compra na Loja Lira E-commerce";
 	$dadosboleto["demonstrativo2"] = "Taxa bancária - R$ 0,00";
 	$dadosboleto["demonstrativo3"] = "";
 	$dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
 	$dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
-	$dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: suporte@hcode.com.br";
-	$dadosboleto["instrucoes4"] = "&nbsp; Emitido pelo sistema Projeto Loja Hcode E-commerce - www.hcode.com.br";
+	$dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: contato@digplay.tech";
+	$dadosboleto["instrucoes4"] = "&nbsp; Emitido pelo sistema Projeto Loja Lira E-commerce - digplay.tech";
 
 	// DADOS OPCIONAIS DE ACORDO COM O BANCO OU CLIENTE
 	$dadosboleto["quantidade"] = "";
@@ -603,22 +635,22 @@ $app->get("/boleto/:idorder", function($idorder){
 
 
 	// DADOS DA SUA CONTA - ITAÚ
-	$dadosboleto["agencia"] = "1690"; // Num da agencia, sem digito
-	$dadosboleto["conta"] = "48781";	// Num da conta, sem digito
-	$dadosboleto["conta_dv"] = "2"; 	// Digito do Num da conta
+	$dadosboleto["agencia"] = "7119"; // Num da agencia, sem digito
+	$dadosboleto["conta"] = "18456";	// Num da conta, sem digito
+	$dadosboleto["conta_dv"] = "7"; 	// Digito do Num da conta
 
 	// DADOS PERSONALIZADOS - ITAÚ
 	$dadosboleto["carteira"] = "175";  // Código da Carteira: pode ser 175, 174, 104, 109, 178, ou 157
 
 	// SEUS DADOS
-	$dadosboleto["identificacao"] = "Hcode Treinamentos";
-	$dadosboleto["cpf_cnpj"] = "24.700.731/0001-08";
-	$dadosboleto["endereco"] = "Rua Ademar Saraiva Leão, 234 - Alvarenga, 09853-120";
-	$dadosboleto["cidade_uf"] = "São Bernardo do Campo - SP";
-	$dadosboleto["cedente"] = "HCODE TREINAMENTOS LTDA - ME";
+	$dadosboleto["identificacao"] = "Dig Play tech";
+	$dadosboleto["cpf_cnpj"] = "31.565.991/0001-83";
+	$dadosboleto["endereco"] = "Rua Mogi Mirim, 20 - Mooca - 03187-040";
+	$dadosboleto["cidade_uf"] = "São Paulo - SP";
+	$dadosboleto["cedente"] = "DIG PLAY TECH - MEI";
 
 	// NÃO ALTERAR!
-	$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "boletophp" . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR;
+	$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "resources" . DIRECTORY_SEPARATOR . "boletophp" . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR;
 
 	require_once($path . "funcoes_itau.php");
 	require_once($path . "layout_itau.php");
