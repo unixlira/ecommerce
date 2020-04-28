@@ -318,6 +318,77 @@ class Cart extends Model {
 
 	}
 
+	public function clearCart($cartId)
+	{
+		$sql = new Sql();
+
+		$product = $sql->select("
+			SELECT b.idproduct FROM tb_cartsproducts a 
+			INNER JOIN tb_products b ON a.idproduct = b.idproduct 
+			WHERE a.idcart = :idcart AND a.dtremoved IS NULL 
+			GROUP BY b.idproduct
+		", [
+			':idcart'=>$cartId
+		]);
+
+		if ($product[0] != null ) {
+
+			$sql->query("UPDATE tb_cartsproducts SET dtremoved = NOW() WHERE idcart = :idcart AND idproduct = :idproduct AND dtremoved IS NULL", [
+				':idcart'=>$cartId,
+				':idproduct'=>(int)$product[0]['idproduct']
+			]);
+
+		}
+	}
+
+
+	public function getProductsADM($cartId)
+	{
+
+		$sql = new Sql();
+
+		$produtos = $sql->select("
+			SELECT b.idproduct, b.desproduct , b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl, COUNT(*) AS nrqtd, SUM(b.vlprice) AS vltotal 
+			FROM tb_cartsproducts a 
+			INNER JOIN tb_products b ON a.idproduct = b.idproduct 
+			WHERE a.idcart = :idcart 
+			GROUP BY b.idproduct, b.desproduct , b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl 
+
+		", [
+			':idcart'=>$cartId
+		]);
+
+		return Product::checkList($produtos);
+
+	}
+
+	public function getProductsTotalsADM($cartId)
+	{
+
+		$sql = new Sql();
+
+		$array = ["deszipcode" => [], "vltotal" => ''];
+
+		$result = $sql->select("
+			SELECT carts.deszipcode, b.vlwidth, b.vlheight, b.vllength, b.vlweight, SUM(vlprice) AS vltotal 
+			FROM tb_cartsproducts a 
+			INNER JOIN tb_products b ON a.idproduct = b.idproduct
+			INNER JOIN tb_carts carts ON a.idcart = carts.idcart
+			WHERE a.idcart = :idcart
+			GROUP BY b.vlwidth, b.vlheight, b.vllength, b.vlweight", 
+			[
+			':idcart'=>$cartId
+		]);
+
+		foreach ($result as $value) {
+			$array['vltotal']=$value['vltotal'];
+			$array['deszipcode']=[$value['deszipcode'],$value['vlwidth'],$value['vlheight'],$value['vllength'],$value['vlweight']];
+		}
+
+		return $array;
+
+	}
+
 }
 
  ?>

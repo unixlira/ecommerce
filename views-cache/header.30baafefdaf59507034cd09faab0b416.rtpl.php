@@ -64,8 +64,9 @@
                                       <?php echo getUserName(); ?> <b class="caret">&nbsp; </b>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/profile"><i class="fa fa-user"> </i> Minha Conta</a></li>
-                                    <li><a href="/logout"><i class="fa fa-sign-out"></i> Sair </a></li>
+                                    <li><a href="/profile/orders">Meus Pedidos</a></li>
+                                    <li><a href="/profile">Minha Conta</a></li>
+                                    <li><a href="/logout"></i> Sair </a></li>
                                 <?php }else{ ?>
 
                                     <li><a href="/login"><i class="fa fa-sign-in"></i> Entrar | Cadastrar</a></li>

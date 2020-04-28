@@ -189,6 +189,7 @@ $app->get("/checkout", function(){
 
 $app->post("/checkout", function(){
 
+
 	User::verifyLogin(false);
 
 	if (!isset($_POST['zipcode']) || $_POST['zipcode'] === '') {
@@ -228,7 +229,7 @@ $app->post("/checkout", function(){
 	}
 
 	$user = User::getFromSession();
-
+	
 	$address = new Address();
 	
 	$_POST['deszipcode'] = $_POST['zipcode'];
@@ -239,7 +240,7 @@ $app->post("/checkout", function(){
 	$address->save();
 	
 	$cart = Cart::getFromSession();
-
+	
 	$cart->getCalculateTotal();
 
 	$order = new Order();
@@ -251,9 +252,10 @@ $app->post("/checkout", function(){
 		'idstatus'=>OrderStatus::EM_ABERTO,
 		'vltotal'=>$cart->getvltotal(),
 	]);
-
 	$order->save();
 
+	$cart->clearCart($cart->getidcart(), true);
+	
 	switch ((int)$_POST['payment-method']) {
 
 		case 1:
@@ -754,9 +756,7 @@ $app->post("/profile/change-password", function(){
 
 	}
 
-	$user->setdespassword($_POST['new_pass']);
-
-	$user->update();
+	$user->updatePassword( $_POST['new_pass']);
 
 	User::setSuccess("Senha alterada com sucesso.");
 

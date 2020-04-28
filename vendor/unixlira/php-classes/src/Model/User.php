@@ -264,6 +264,22 @@ class User extends Model {
 
 	}
 
+	public function updatePassword($data)
+	{
+
+		if($data != null){
+
+			$sql = new Sql();
+
+			$sql->select("UPDATE tb_users SET despassword = :despassword WHERE iduser = :iduser;", array(
+				":iduser"=>$this->getiduser(),
+				":despassword"=>User::getPasswordHash($data),
+			));
+		}
+
+		return true;		
+	}
+
 	public static function validForgotDecrypt($code)
 	{
 

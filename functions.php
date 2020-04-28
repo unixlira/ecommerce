@@ -57,4 +57,13 @@ function getCartVlSubTotal()
 
 }
 
+
+function correct_encoding($nome)
+{
+	if(is_string($nome)){
+		$data = utf8_encode($nome);
+	}
+	return $data;
+}
+
  ?>
